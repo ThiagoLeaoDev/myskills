@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TextInput,
-  Platform, 
+  Platform,
+  FlatList 
 } from "react-native";
 
 import { Button } from "../components/Button";
@@ -13,14 +14,34 @@ import { SkillCard } from "../components/SkillCard";
 export function Home(){
   const [newSkill, setNewSkill] = useState('');
   const [mySkills, setMySkills] = useState([]);
+  const [greeting, setgreeting] = useState('');
 
   function handleAddNewSkill(){
     setMySkills(oldState => [...oldState, newSkill]) // (...) Spread operator => despeja o conteudo do vetor em um novo vetor
   }
 
+  useEffect(() => {
+    const currentHour = new Date().getHours();
+    
+    if(currentHour < 12){
+      setgreeting('Good morning');
+    }
+    else if(currentHour >= 12 && currentHour < 18){
+      setgreeting('Good afternoon');
+    }
+    else{
+      setgreeting('Good night');
+    }
+  }, []) 
+
   return(
     <View style={styles.container}>
       <Text style={styles.title}>Welcome, Thiago</Text>
+
+      <Text style={styles.greeting}>
+        {greeting}
+      </Text>
+
 
       <TextInput
         style={styles.input}
@@ -35,11 +56,13 @@ export function Home(){
         My Skills
       </Text>
 
-      {
-        mySkills.map(skill => (
-          <SkillCard skill={skill}/>
-        ))
-      }
+      <FlatList //lazy load
+        data={mySkills}
+        keyExtractor={item => item}
+        renderItem={({ item }) => (
+          <SkillCard skill={item}/>
+        )}
+      />
       
     </View>
   )
@@ -65,4 +88,8 @@ const styles = StyleSheet.create({
     marginTop: 30,
     borderRadius: 7
   },
+  greeting: {
+    color: '#FFF',
+    opacity: .5
+  }
 })
