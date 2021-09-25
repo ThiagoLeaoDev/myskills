@@ -12,13 +12,24 @@ import {
 import { Button } from "../components/Button";
 import { SkillCard } from "../components/SkillCard";
 
+interface SkillData { //tipo de dado
+  id: string;
+  name: string; 
+  //"?" Torna o atributo opcional
+}
+
 export function Home(){
   const [newSkill, setNewSkill] = useState('');
-  const [mySkills, setMySkills] = useState([]);
+  const [mySkills, setMySkills] = useState<SkillData[]>([]);
   const [greeting, setgreeting] = useState('');
 
   function handleAddNewSkill(){
-    setMySkills(oldState => [...oldState, newSkill]) // (...) Spread operator => despeja o conteudo do vetor em um novo vetor
+    const data = {
+      id: String(new Date().getTime()),
+      name: newSkill,
+    }
+
+    setMySkills(oldState => [...oldState, data]) // (...) Spread operator => despeja o conteudo do vetor em um novo vetor
   }
 
   useEffect(() => {
@@ -60,9 +71,9 @@ export function Home(){
 
       <FlatList //lazy load
         data={mySkills}
-        keyExtractor={item => item}
+        keyExtractor={item => item.id}
         renderItem={({ item }) => (
-          <SkillCard skill={item}/>
+          <SkillCard skill={item.name}/>
         )}
       />
       
