@@ -10,7 +10,7 @@ interface ButtonProps extends TouchableOpacityProps{//TouchableOpacityProps reto
   title: string;
 } 
 
-export function Button({ title, ...rest } : ButtonProps){ //traz todas as propriedades do button, nao so a onPress
+export function Button({ title, ...rest } : ButtonProps){ //"...rest" traz todas as propriedades do button, nao so a onPress
   return(
     <TouchableOpacity
       style={styles.button}
